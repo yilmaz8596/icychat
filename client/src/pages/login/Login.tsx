@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useStore } from "../../store/useStore";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { login } from "../../api/auth";
-import { LoginProps } from "../../types";
+import { LoginProps, LoginResponse } from "../../types";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -23,30 +24,45 @@ export default function Login() {
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: (data: LoginProps) => {
+    onSuccess: (data: LoginResponse) => {
       queryClient.setQueryData(["user"], data);
+      setUser(data.user);
     },
   });
 
-  const { isLoading, isError, error, isSuccess } = mutation;
+  const { isError, error, isSuccess } = mutation;
+
+  const { setUser } = useStore();
 
   return (
     <Formik
       initialValues={{
-        email: "",
-        password: "",
+        user: {
+          _id: "",
+          fullName: "",
+          username: "",
+          email: "",
+          gender: "",
+        },
       }}
       validationSchema={validationSchema}
-      onSubmit={async (values) => {
+      onSubmit={async (values: LoginProps) => {
         try {
           setLoading(true);
-          await mutation.mutateAsync(values);
+          const resp = await mutation.mutateAsync(values);
+          console.log(resp);
+
           setTimeout(() => {
             setLoading(false);
             navigate("/");
           }, 2000);
+          if (isSuccess) {
+            setLoading(false);
+            setUser(resp.user);
+          }
         } catch (error) {
           console.error(error);
+          setLoading(false);
         }
       }}
     >

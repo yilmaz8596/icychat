@@ -1,4 +1,4 @@
-import { RegisterProps, LoginProps } from "../types";
+import { RegisterProps, LoginProps, LoginResponse } from "../types";
 
 export const register = async (data: RegisterProps): Promise<RegisterProps> => {
   try {
@@ -27,7 +27,7 @@ export const register = async (data: RegisterProps): Promise<RegisterProps> => {
   }
 };
 
-export const login = async (data: LoginProps): Promise<LoginProps> => {
+export const login = async (data: LoginProps): Promise<LoginResponse> => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/api/auth/signin`,
@@ -45,6 +45,8 @@ export const login = async (data: LoginProps): Promise<LoginProps> => {
     if (!response.ok) {
       throw new Error(responseData.message || "Login failed");
     }
+    console.log(responseData);
+
     return responseData;
   } catch (error) {
     if (error instanceof Error) {
