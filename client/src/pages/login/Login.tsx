@@ -39,13 +39,6 @@ export default function Login() {
       initialValues={{
         email: "",
         password: "",
-        user: {
-          _id: "",
-          fullName: "",
-          username: "",
-          email: "",
-          gender: "",
-        },
       }}
       validationSchema={validationSchema}
       onSubmit={async (values: LoginProps) => {

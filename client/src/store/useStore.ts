@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface StoreState {
   user: {
@@ -33,9 +34,16 @@ interface StoreState {
   setConversation: (conversation: StoreState["conversation"] | null) => void;
 }
 
-export const useStore = create<StoreState>((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
-  conversation: null,
-  setConversation: (conversation) => set({ conversation }),
-}));
+export const useStore = create<StoreState>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+      conversation: null,
+      setConversation: (conversation) => set({ conversation }),
+    }),
+    {
+      name: "chat-storage", // unique name for localStorage key
+    }
+  )
+);

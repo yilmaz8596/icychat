@@ -13,22 +13,34 @@ export default function Conversations() {
     queryFn: getConversations,
   });
 
+  if (isLoading)
+    return (
+      <div className="mx-auto">
+        <span className="loading loading-spinner"></span>
+      </div>
+    );
+
+  if (error)
+    return (
+      <p className="text-red-500">
+        {error.message || "An unexpected error occurred"}
+      </p>
+    );
+
+  if (!conversations || conversations.length === 0) {
+    return <p className="text-center text-gray-200">No conversations yet 😢</p>;
+  }
+
   return (
     <div>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>{error.message}</p>
-      ) : (
-        conversations?.map((conversation, idx) => (
-          <Conversation
-            key={conversation._id}
-            conversation={conversation}
-            emoji="👋"
-            lastIdx={idx === conversations.length - 1}
-          />
-        ))
-      )}
+      {conversations?.map((conversation, idx) => (
+        <Conversation
+          key={conversation._id}
+          conversation={conversation}
+          emoji="👋"
+          lastIdx={idx === conversations.length - 1}
+        />
+      ))}
     </div>
   );
 }
