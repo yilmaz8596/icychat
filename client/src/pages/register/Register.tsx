@@ -1,7 +1,11 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import GenderCheckBox from "../../components/GenderCheckBox";
+import { register } from "../../api/auth";
+import { RegisterProps } from "../../types";
 
 export default function Register() {
   const validationSchema = Yup.object({
@@ -17,6 +21,19 @@ export default function Register() {
       .required("Gender is required"),
   }).equals(["password", "confirmPassword"], "Passwords must match");
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: register,
+    onSuccess: (data: RegisterProps) => {
+      queryClient.setQueryData(["user"], data);
+    },
+  });
+
+  const navigate = useNavigate();
+
+  const { isLoading, isError, error, isSuccess } = mutation;
+
   return (
     <Formik
       initialValues={{
@@ -28,12 +45,31 @@ export default function Register() {
         gender: "",
       }}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log(values);
+      onSubmit={async (values) => {
+        try {
+          await mutation.mutateAsync(values);
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        } catch (error) {
+          console.error(error);
+        }
       }}
     >
       {({ isSubmitting, setFieldValue, values }) => (
         <Form className="flex flex-col items-center justify-center min-w-96 mx-auto">
+          <div className="toast toast-top toast-start">
+            {isError && (
+              <div className="alert alert-error">
+                <span>{`An error occurred:${error?.message}`}</span>
+              </div>
+            )}
+            {isSuccess && (
+              <div className="alert alert-success">
+                <span>Register successfull!</span>
+              </div>
+            )}
+          </div>
           <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
             <h1 className="text-blue-500 text-5xl font-semibold text-center mb-2">
               IcyChat
@@ -122,6 +158,7 @@ export default function Register() {
               <button
                 className="btn btn-block btn-sm mt-2"
                 disabled={isSubmitting}
+                type="submit"
               >
                 {isSubmitting ? (
                   <span className="loading loading-spinner "></span>

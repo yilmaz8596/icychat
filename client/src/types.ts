@@ -10,3 +10,17 @@ export interface Message {
   shakeClass?: string;
   formattedTime?: string;
 }
+
+export interface RegisterProps {
+  fullName: string;
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  gender: string;
+}
+
+export interface LoginProps {
+  email: string;
+  password: string;
+}

@@ -1,10 +1,16 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useState } from "react";
+import { login } from "../../api/auth";
+import { LoginProps } from "../../types";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -12,6 +18,17 @@ export default function Login() {
       .required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: (data: LoginProps) => {
+      queryClient.setQueryData(["user"], data);
+    },
+  });
+
+  const { isLoading, isError, error, isSuccess } = mutation;
 
   return (
     <Formik
@@ -21,13 +38,34 @@ export default function Login() {
       }}
       validationSchema={validationSchema}
       onSubmit={async (values) => {
-        setLoading(true);
-        console.log(values);
-        setLoading(false);
+        try {
+          setLoading(true);
+          await mutation.mutateAsync(values);
+          setTimeout(() => {
+            setLoading(false);
+            navigate("/");
+          }, 2000);
+        } catch (error) {
+          console.error(error);
+        }
       }}
     >
       {({ isSubmitting }) => (
         <Form className="flex flex-col items-center justify-center min-w-96 mx-auto">
+          <div className="toast toast-top toast-start">
+            {isError && (
+              <div className="alert alert-error">
+                <span>
+                  <strong>Error: {error?.message}</strong>
+                </span>
+              </div>
+            )}
+            {isSuccess && (
+              <div className="alert alert-success">
+                <span>Login successfull!</span>
+              </div>
+            )}
+          </div>
           <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
             <h1 className="text-blue-500 text-5xl font-semibold text-center mb-2">
               IcyChat
@@ -62,10 +100,10 @@ export default function Login() {
               />
             </div>
             <Link
-              to="/signup"
+              to="/register"
               className="text-sm text-gray-200 hover:underline hover:text-blue-600 mt-2 inline-block mb-4"
             >
-              {"Don't"} have an account?
+              {"Don't"} have an account? Register
             </Link>
             <div>
               <button
