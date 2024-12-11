@@ -55,3 +55,24 @@ export const login = async (data: LoginProps): Promise<LoginResponse> => {
     throw new Error("An unexpected error occurred");
   }
 };
+
+export const logout = async (): Promise<void> => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/auth/signout`,
+      {
+        method: "POST",
+      }
+    );
+    const text = await response.text();
+    const responseData = text ? JSON.parse(text) : {};
+    if (!response.ok) {
+      throw new Error(responseData.message || "Logout failed");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred");
+  }
+};
