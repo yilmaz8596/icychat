@@ -6,6 +6,7 @@ import cors from "cors";
 import authRouter from "./routes/auth.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import userRouter from "./routes/user.routes.js";
+import conversationRouter from "./routes/conversation.routes.js";
 
 import { connectToDb } from "./db/connectToDb.js";
 
@@ -27,6 +28,7 @@ app.use(
 app.use("/api/auth", authRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/user", userRouter);
+app.use("/api/conversation", conversationRouter);
 
 app.use((err, req, res, next) => {
   err.status = err.status || 500;

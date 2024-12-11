@@ -46,7 +46,7 @@ export const signup = async (req, res, next) => {
   }
 };
 
-export const signin = async (req, res) => {
+export const signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const userExists = await User.findOne({ email });
@@ -75,10 +75,12 @@ export const signin = async (req, res) => {
         email: userExists.email,
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    next(createHttpError.InternalServerError());
+  }
 };
 
-export const signout = async (req, res) => {
+export const signout = async (req, res, next) => {
   try {
     res.clearCookie("token");
     res.status(200).json({

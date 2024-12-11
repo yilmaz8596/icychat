@@ -43,3 +43,27 @@ export interface LoginResponse {
     gender: string;
   };
 }
+
+export interface ConversationResponse {
+  _id: string;
+  participants: {
+    _id: string;
+    fullName: string;
+    username: string;
+    email: string;
+    gender: string;
+    profilePic: string;
+  }[];
+  messages: {
+    _id: string;
+    message: string;
+    senderId: string;
+    receiverId: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
