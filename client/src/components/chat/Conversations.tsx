@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { useStore } from "../../store/useStore";
+import { useEffect } from "react";
 import Conversation from "./Conversation";
 import { getConversations } from "../../api/conversation";
-import { ConversationResponse } from "../../types";
+import { ConversationResponse, UserProps } from "../../types";
 import { getRandomEmoji } from "../../utils/emojis";
 
 export default function Conversations() {
@@ -13,6 +15,14 @@ export default function Conversations() {
     queryKey: ["conversations"],
     queryFn: getConversations,
   });
+
+  const { fetchUsers, users } = useStore();
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  console.log(users);
 
   if (isLoading)
     return (
@@ -28,18 +38,18 @@ export default function Conversations() {
       </p>
     );
 
-  if (!conversations || conversations.length === 0) {
+  if (!users || users.length === 0) {
     return <p className="text-center text-gray-200">No conversations yet 😢</p>;
   }
 
   return (
     <div>
-      {conversations?.map((conversation, idx) => (
+      {users?.map((user, idx) => (
         <Conversation
-          key={conversation._id}
-          conversation={conversation}
+          key={user._id}
+          user={user as UserProps}
           emoji={getRandomEmoji()}
-          lastIdx={idx === conversations.length - 1}
+          lastIdx={idx === users.length - 1}
         />
       ))}
     </div>

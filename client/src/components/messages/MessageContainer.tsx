@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useStore } from "../../store/useStore";
 import { TiMessages } from "react-icons/ti";
 import Messages from "./Messages";
+import { Message } from "../../types";
 import MessageInput from "./MessageInput";
 import { SelectedConversation } from "../../types";
 
@@ -10,7 +11,9 @@ export default function MessageContainer() {
     useStore();
   const messages = selectedConversation?.messages;
 
-  const otherParticipant = conversation?.otherParticipant;
+  console.log(messages);
+
+  const otherParticipant = selectedConversation?.participants[1];
 
   useEffect(() => {
     return () => setSelectedConversation(null);
@@ -26,7 +29,7 @@ export default function MessageContainer() {
           <div className="bg-slate-500 px-4 py-2 mb-2">
             <span className="label-text">To:</span>{" "}
             <span className="text-gray-900 font-bold">
-              {(selectedConversation as SelectedConversation).fullName}
+              {otherParticipant?.fullName}
             </span>
           </div>
           <Messages

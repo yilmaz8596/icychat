@@ -7,7 +7,7 @@ import { logout } from "../../api/auth";
 export default function LogoutButton() {
   const [loading, setLoading] = useState(false);
 
-  const { setUser } = useStore();
+  const { setUser, user } = useStore();
   const navigate = useNavigate();
 
   const mutation = useMutation({
@@ -33,6 +33,8 @@ export default function LogoutButton() {
       setLoading(false);
     }
   };
+
+  console.log(user);
 
   const { isError, error, isSuccess } = mutation;
   return (

@@ -32,7 +32,7 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const { isLoading, isError, error, isSuccess } = mutation;
+  const { isError, error, isSuccess } = mutation;
 
   return (
     <Formik

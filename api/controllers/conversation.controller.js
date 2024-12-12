@@ -33,3 +33,36 @@ export const getConversationsByUserId = async (req, res, next) => {
     next(createHttpError.InternalServerError());
   }
 };
+
+export const createConversation = async (req, res, next) => {
+  try {
+    const { otherUserId } = req.body;
+    const loggedInUserId = req.user._id;
+
+    // Check for existing conversation with populated messages
+    const existingConversation = await Conversation.findOne({
+      participants: { $all: [loggedInUserId, otherUserId] },
+    }).populate("messages"); // Add this populate call
+
+    if (existingConversation) {
+      return res.status(200).json(existingConversation);
+    }
+
+    // Create new conversation
+    const newConversation = new Conversation({
+      participants: [loggedInUserId, otherUserId],
+    });
+
+    await newConversation.save();
+
+    // Fetch the saved conversation with populated messages
+    const populatedConversation = await Conversation.findById(
+      newConversation._id
+    ).populate("messages");
+
+    res.status(201).json(populatedConversation);
+  } catch (error) {
+    console.log(error);
+    next(createHttpError.InternalServerError());
+  }
+};

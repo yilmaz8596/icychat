@@ -1,61 +1,59 @@
 import { useState } from "react";
-import { Message as MessageProps } from "../../types";
+import { Message as MessageProps, Participant } from "../../types";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
+import { useStore } from "../../store/useStore";
+import { Message as MyMessage } from "../../types";
 
-export default function Messages({
-  messages,
-  lastMessageRef,
-  profilePic,
-}: {
-  messages?: MessageProps[];
-  lastMessageRef?: React.RefObject<HTMLDivElement>;
+interface MessagesProps {
+  messages?: MyMessage[];
   profilePic: string;
-}) {
+}
+
+// Messages.tsx - Update your Messages component with the interface
+export default function Messages({ messages, profilePic }: MessagesProps) {
   const [loading, setLoading] = useState(false);
+  const { selectedConversation, user, conversations } = useStore();
+  // const messages = selectedConversation?.messages;
+
+  // Create a map of user IDs to profile pictures
+
+  console.log(selectedConversation);
+  console.log(messages);
+
   return (
     <div className="px-4 flex-1 overflow-auto">
       {!loading &&
-        messages !== undefined &&
-        messages.length > 0 &&
         messages?.map((message: MessageProps) => (
-          <div key={message._id} ref={lastMessageRef}>
+          <div key={message._id}>
             <Message
-              message={message?.message}
-              senderId={message?.senderId}
-              receiverId={message?.receiverId}
-              createdAt={message?.createdAt}
-              updatedAt={message?.updatedAt}
-              _id={message?._id}
-              profilePic={profilePic}
-              bubbleBgColor={
-                message?.senderId === message?.receiverId
-                  ? "bg-gray-500"
-                  : "bg-blue-500"
+              message={message.message}
+              senderProfilePic={
+                message.senderId === user?._id
+                  ? user?.profilePic || getDefaultAvatar(user?._id || "")
+                  : conversations?.find(
+                      (conversation) =>
+                        conversation.otherParticipant._id === message.senderId
+                    )?.otherParticipant.profilePic ||
+                    getDefaultAvatar(message.senderId)
               }
-              chatClassName={
-                message?.senderId === message?.receiverId
-                  ? "justify-end"
-                  : "justify-start"
-              }
+              senderId={message.senderId}
+              receiverId={message.receiverId}
             />
           </div>
         ))}
 
       {loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
-      {!loading && messages !== undefined && messages.length === 0 && (
-        <p
-          className="
-          text-center
-          text-gray-400
-          text-lg
-          mt-4
-          font-semibold
-        "
-        >
-          No messages yet
+      {!loading && (!messages || messages.length === 0) && (
+        <p className="text-center text-gray-400 text-lg mt-4 font-semibold">
+          Send a message to start the conversation
         </p>
       )}
     </div>
   );
 }
+
+// Helper function to generate default avatars
+const getDefaultAvatar = (userId: string): string => {
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`;
+};

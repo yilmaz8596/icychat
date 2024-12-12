@@ -54,6 +54,7 @@ export const signin = async (req, res, next) => {
     if (!userExists) {
       return next(createHttpError.NotFound("User not found"));
     }
+
     const isPasswordCorrect = await bcrypt.compare(
       password,
       userExists?.password
@@ -65,14 +66,22 @@ export const signin = async (req, res, next) => {
 
     generateToken(userExists._id, res);
 
+    // Update and get the new document
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userExists._id },
+      { loggedIn: true },
+      { new: true }
+    );
+
     res.status(200).json({
       status: "success",
       message: "User signed in successfully",
       user: {
-        _id: userExists._id,
-        fullName: userExists.fullName,
-        username: userExists.username,
-        email: userExists.email,
+        _id: updatedUser._id,
+        fullName: updatedUser.fullName,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        loggedIn: updatedUser.loggedIn,
       },
     });
   } catch (error) {
@@ -82,10 +91,20 @@ export const signin = async (req, res, next) => {
 
 export const signout = async (req, res, next) => {
   try {
+    const userExists = await User.findByIdAndUpdate(
+      req.user._id,
+      { loggedIn: false },
+      { new: true }
+    ).select("-password -email -username -fullName _id");
+
+    if (!userExists) {
+      return next(createHttpError.NotFound("User not found"));
+    }
     res.clearCookie("token");
     res.status(200).json({
       status: "success",
       message: "User signed out successfully",
+      user: userExists,
     });
   } catch (error) {
     next(createHttpError.InternalServerError());

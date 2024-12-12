@@ -62,6 +62,10 @@ export const logout = async (): Promise<void> => {
       `${import.meta.env.VITE_API_URL}/api/auth/signout`,
       {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       }
     );
     const text = await response.text();

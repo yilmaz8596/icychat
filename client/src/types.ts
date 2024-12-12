@@ -1,10 +1,10 @@
 export interface Message {
-  _id: string;
+  _id?: string;
   message: string;
   senderId: string;
   receiverId: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
   __v?: number;
 }
 
@@ -24,6 +24,11 @@ export interface User {
   username: string;
   email: string;
   gender: string;
+  loggedIn: boolean;
+}
+
+export interface UserProps extends User {
+  profilePic: string;
 }
 
 export interface LoginProps {
@@ -41,29 +46,22 @@ export interface LoginResponse {
   };
 }
 
+export interface Participant {
+  _id: string;
+  fullName: string;
+  username: string;
+  email: string;
+  gender: string;
+  profilePic: string;
+}
+
 export interface ConversationResponse {
   _id: string;
-  participants: {
-    _id: string;
-    fullName: string;
-    username: string;
-    email: string;
-    gender: string;
-    profilePic: string;
-  }[];
-  messages: {
-    _id: string;
-    message: string;
-    senderId: string;
-    receiverId: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  }[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  participants: string[];
+  messages: Message[];
   otherParticipant: OtherParticipant;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface SelectedConversation {
