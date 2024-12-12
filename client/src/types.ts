@@ -1,14 +1,11 @@
 export interface Message {
-  _id?: string;
-  chatClassName?: string;
-  profilePic?: string;
-  message?: {
-    message: string;
-    sender?: string;
-  };
-  bubbleBgColor?: string;
-  shakeClass?: string;
-  formattedTime?: string;
+  _id: string;
+  message: string;
+  senderId: string;
+  receiverId: string;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
 }
 
 export interface RegisterProps {
@@ -66,4 +63,21 @@ export interface ConversationResponse {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  otherParticipant: OtherParticipant;
+}
+
+export interface SelectedConversation {
+  _id: string;
+  profilePic: string;
+  fullName: string;
+  messages: Message[];
+}
+
+export interface OtherParticipant {
+  _id: string;
+  fullName: string;
+  username: string;
+  email: string;
+  gender: string;
+  profilePic: string;
 }

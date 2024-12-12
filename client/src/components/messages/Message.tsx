@@ -1,13 +1,21 @@
 import { Message as MessageProps } from "../../types";
 
+interface MessagePropsExtended extends MessageProps {
+  chatClassName?: string;
+  bubbleBgColor?: string;
+  shakeClass?: string;
+  profilePic?: string;
+  formattedTime?: string;
+}
+
 export default function Message({
   message,
   chatClassName,
-  profilePic,
   bubbleBgColor,
   shakeClass,
+  profilePic,
   formattedTime,
-}: MessageProps) {
+}: MessagePropsExtended) {
   return (
     <div className={`chat ${chatClassName}`}>
       <div className="chat-image avatar">
@@ -18,7 +26,7 @@ export default function Message({
       <div
         className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}
       >
-        {message?.message}
+        {message}
       </div>
       <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
         {formattedTime}

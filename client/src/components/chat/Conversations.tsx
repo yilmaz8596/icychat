@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import Conversation from "./Conversation";
 import { getConversations } from "../../api/conversation";
 import { ConversationResponse } from "../../types";
+import { getRandomEmoji } from "../../utils/emojis";
 
 export default function Conversations() {
   const {
@@ -37,7 +38,7 @@ export default function Conversations() {
         <Conversation
           key={conversation._id}
           conversation={conversation}
-          emoji="👋"
+          emoji={getRandomEmoji()}
           lastIdx={idx === conversations.length - 1}
         />
       ))}
