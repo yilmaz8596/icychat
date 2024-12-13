@@ -25,6 +25,7 @@ export interface User {
   email: string;
   gender: string;
   loggedIn: boolean;
+  profilePic?: string;
 }
 
 export interface UserProps extends User {

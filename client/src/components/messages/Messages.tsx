@@ -10,38 +10,35 @@ interface MessagesProps {
   profilePic: string;
 }
 
-// Messages.tsx - Update your Messages component with the interface
 export default function Messages({ messages, profilePic }: MessagesProps) {
   const [loading, setLoading] = useState(false);
-  const { selectedConversation, user, conversations } = useStore();
-  // const messages = selectedConversation?.messages;
-
-  // Create a map of user IDs to profile pictures
+  const { selectedConversation, user, users, conversations } = useStore();
 
   console.log(selectedConversation);
-  console.log(messages);
+  console.log(users);
 
   return (
     <div className="px-4 flex-1 overflow-auto">
       {!loading &&
-        messages?.map((message: MessageProps) => (
-          <div key={message._id}>
-            <Message
-              message={message.message}
-              senderProfilePic={
-                message.senderId === user?._id
-                  ? user?.profilePic || getDefaultAvatar(user?._id || "")
-                  : conversations?.find(
-                      (conversation) =>
-                        conversation.otherParticipant._id === message.senderId
-                    )?.otherParticipant.profilePic ||
-                    getDefaultAvatar(message.senderId)
-              }
-              senderId={message.senderId}
-              receiverId={message.receiverId}
-            />
-          </div>
-        ))}
+        messages?.map((message: MessageProps) => {
+          const receiverId = message.receiverId;
+          const receiver = users?.find((u) => u._id === receiverId);
+          console.log(receiver);
+          console.log(receiver?.profilePic);
+
+          return (
+            <div key={message._id}>
+              <Message
+                message={message.message}
+                senderProfilePic={user?.profilePic as string}
+                receiverProfilePic={receiver?.profilePic ?? ""}
+                senderId={message.senderId}
+                receiverId={message.receiverId}
+                createdAt={message.createdAt}
+              />
+            </div>
+          );
+        })}
 
       {loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
       {!loading && (!messages || messages.length === 0) && (
@@ -52,8 +49,3 @@ export default function Messages({ messages, profilePic }: MessagesProps) {
     </div>
   );
 }
-
-// Helper function to generate default avatars
-const getDefaultAvatar = (userId: string): string => {
-  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`;
-};

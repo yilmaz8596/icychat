@@ -82,6 +82,7 @@ export const signin = async (req, res, next) => {
         username: updatedUser.username,
         email: updatedUser.email,
         loggedIn: updatedUser.loggedIn,
+        profilePic: updatedUser.profilePic,
       },
     });
   } catch (error) {
