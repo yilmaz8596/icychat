@@ -7,11 +7,11 @@ import authRouter from "./routes/auth.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import userRouter from "./routes/user.routes.js";
 import conversationRouter from "./routes/conversation.routes.js";
+import { app, server } from "./socket/socket.js";
 
 import { connectToDb } from "./db/connectToDb.js";
 
 dotenv.config();
-const app = express();
 
 const PORT = process.env.PORT || 5000;
 
@@ -40,7 +40,7 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectToDb();
   console.log(`Server is running on port ${PORT}`);
 });

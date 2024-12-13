@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useSocketContext } from "../../context/socket.context";
 import { useStore } from "../../store/useStore";
 import {
   ConversationResponse,
@@ -21,8 +21,11 @@ export default function Conversation({
   emoji,
   lastIdx,
 }: ConversationProps) {
-  const { setSelectedConversation: setClickedConversation, conversations } =
-    useStore();
+  const {
+    setSelectedConversation: setClickedConversation,
+    conversations,
+    selectedConversation,
+  } = useStore();
 
   const handleCreateConversation = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -49,17 +52,27 @@ export default function Conversation({
     }
   };
 
-  const isSelected = conversation?._id === user._id;
+  const isSelected = selectedConversation?._id === conversation?._id;
+  const { onlineUsers } = useSocketContext()!;
+  const isOnline = onlineUsers.includes(user._id);
+
+  console.log(isOnline);
 
   return (
     <div
       className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
-        ${isSelected ? "bg-sky-500" : ""}`}
+       `}
       onClick={handleCreateConversation}
     >
-      <div>
+      <div className={`avatar ${isOnline ? "online" : ""}`}>
         <div className="w-12 rounded-full">
-          <img src={user?.profilePic} alt="user avatar" />
+          <img
+            src={
+              user?.profilePic ||
+              "https://www.gravatar.com/avatar/" + user?.email + "?d=identicon"
+            }
+            alt="user avatar"
+          />
         </div>
       </div>
 
