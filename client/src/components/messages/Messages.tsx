@@ -14,17 +14,12 @@ export default function Messages({ messages, profilePic }: MessagesProps) {
   const [loading, setLoading] = useState(false);
   const { selectedConversation, user, users, conversations } = useStore();
 
-  console.log(selectedConversation);
-  console.log(users);
-
   return (
     <div className="px-4 flex-1 overflow-auto">
       {!loading &&
         messages?.map((message: MessageProps) => {
           const receiverId = message.receiverId;
           const receiver = users?.find((u) => u._id === receiverId);
-          console.log(receiver);
-          console.log(receiver?.profilePic);
 
           return (
             <div key={message._id}>

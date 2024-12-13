@@ -21,7 +21,8 @@ export default function Conversation({
   emoji,
   lastIdx,
 }: ConversationProps) {
-  const { setSelectedConversation: setClickedConversation } = useStore();
+  const { setSelectedConversation: setClickedConversation, conversations } =
+    useStore();
 
   const handleCreateConversation = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -35,8 +36,13 @@ export default function Conversation({
 
     try {
       const newConversation = await createConversation(user._id);
-      if (newConversation) {
+      if (
+        newConversation &&
+        !conversations?.find((c) => c._id === newConversation._id)
+      ) {
         setClickedConversation(newConversation);
+      } else {
+        return;
       }
     } catch (error) {
       console.error("Error creating conversation:", error);

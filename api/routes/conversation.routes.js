@@ -6,7 +6,7 @@ import {
 import { verifyUser } from "../middleware/verifyUser.js";
 const router = express.Router();
 
-router.get("/", verifyUser, getConversationsByUserId);
 router.post("/", verifyUser, createConversation);
+router.get("/", verifyUser, getConversationsByUserId);
 
 export default router;

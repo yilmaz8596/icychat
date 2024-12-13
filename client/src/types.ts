@@ -54,6 +54,7 @@ export interface Participant {
   email: string;
   gender: string;
   profilePic: string;
+  loggedIn?: boolean;
 }
 
 export interface ConversationResponse {

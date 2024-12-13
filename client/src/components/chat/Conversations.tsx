@@ -1,28 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { useStore } from "../../store/useStore";
-import { useEffect } from "react";
 import Conversation from "./Conversation";
-import { getConversations } from "../../api/conversation";
-import { ConversationResponse, UserProps } from "../../types";
+import { getAllUsers } from "../../api/user";
+import { UserProps } from "../../types";
 import { getRandomEmoji } from "../../utils/emojis";
 
 export default function Conversations() {
   const {
-    data: conversations,
     isLoading,
     error,
-  } = useQuery<ConversationResponse[]>({
-    queryKey: ["conversations"],
-    queryFn: getConversations,
+    data: users,
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
   });
-
-  const { fetchUsers, users } = useStore();
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
-
-  console.log(users);
 
   if (isLoading)
     return (
@@ -44,7 +34,7 @@ export default function Conversations() {
 
   return (
     <div>
-      {users?.map((user, idx) => (
+      {users?.map((user: UserProps, idx: number) => (
         <Conversation
           key={user._id}
           user={user as UserProps}

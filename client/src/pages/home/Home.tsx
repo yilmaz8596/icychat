@@ -6,12 +6,9 @@ import MessageContainer from "../../components/messages/MessageContainer";
 import toast from "react-hot-toast";
 
 export default function Home() {
-  const { user, conversation } = useStore();
+  const { user } = useStore();
 
   const navigate = useNavigate();
-
-  console.log(user);
-  console.log(conversation);
 
   useEffect(() => {
     if (!user?._id) {
