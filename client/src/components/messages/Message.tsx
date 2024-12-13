@@ -12,6 +12,7 @@ export default function Message({
   senderProfilePic,
   receiverProfilePic,
   createdAt,
+  shouldShake,
 }: MessagePropsExtended) {
   const { user } = useStore();
   const isCurrentUser = senderId === user?._id;
@@ -22,6 +23,8 @@ export default function Message({
     const img = e.target as HTMLImageElement;
     img.src = getDefaultAvatar(senderId, user?.gender || "");
   };
+
+  const shakeClass = shouldShake ? "shake" : "";
 
   return (
     <div
@@ -50,7 +53,7 @@ export default function Message({
         <div
           className={`relative  chat-bubble ${
             isCurrentUser ? "bg-blue-500" : "bg-gray-500"
-          }`}
+          } ${shakeClass}`}
         >
           <p className="text-white">{message}</p>
           <div

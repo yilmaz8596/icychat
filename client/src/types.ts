@@ -5,6 +5,7 @@ export interface Message {
   receiverId: string;
   createdAt?: string;
   updatedAt?: string;
+  shouldShake?: boolean;
   __v?: number;
 }
 
