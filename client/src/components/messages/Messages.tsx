@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useListenMessages } from "../../hooks/useListenMessages";
 import { Message as MessageProps } from "../../types";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
@@ -13,9 +13,21 @@ interface MessagesProps {
 
 export default function Messages({ messages, profilePic }: MessagesProps) {
   const [loading, setLoading] = useState(false);
-  const { user, users } = useStore();
+  const { user, users, selectedConversation } = useStore();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useListenMessages();
+
+  console.log(selectedConversation);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div className="px-4 flex-1 overflow-auto">
@@ -33,6 +45,7 @@ export default function Messages({ messages, profilePic }: MessagesProps) {
                 senderId={message.senderId}
                 receiverId={message.receiverId}
                 createdAt={message.createdAt}
+                shouldShake={message.shouldShake}
               />
             </div>
           );
@@ -44,6 +57,7 @@ export default function Messages({ messages, profilePic }: MessagesProps) {
           Send a message to start the conversation
         </p>
       )}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

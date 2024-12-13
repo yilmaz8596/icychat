@@ -1,5 +1,6 @@
 import { Message as MessageProps } from "../../types";
 import { useStore } from "../../store/useStore";
+import { useState, useEffect } from "react";
 
 interface MessagePropsExtended extends MessageProps {
   senderProfilePic: string;
@@ -16,6 +17,19 @@ export default function Message({
 }: MessagePropsExtended) {
   const { user } = useStore();
   const isCurrentUser = senderId === user?._id;
+
+  const [isShaking, setIsShaking] = useState(shouldShake);
+
+  // Reset shake after animation
+  useEffect(() => {
+    if (isShaking) {
+      const timer = setTimeout(() => {
+        setIsShaking(false);
+      }, 500); // Match this with your animation duration
+
+      return () => clearTimeout(timer);
+    }
+  }, [isShaking]);
 
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>
@@ -51,9 +65,9 @@ export default function Message({
         }`}
       >
         <div
-          className={`relative  chat-bubble ${
+          className={`relative chat-bubble min-w-fit ${
             isCurrentUser ? "bg-blue-500" : "bg-gray-500"
-          } ${shakeClass}`}
+          } ${isShaking ? "shake" : ""}`}
         >
           <p className="text-white">{message}</p>
           <div
