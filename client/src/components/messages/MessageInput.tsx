@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useStore } from "../../store/useStore";
 import { BsSend } from "react-icons/bs";
 import { BsEmojiSmile } from "react-icons/bs";

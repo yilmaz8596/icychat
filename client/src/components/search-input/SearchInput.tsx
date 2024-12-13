@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useStore } from "../../store/useStore";
 import { useQuery } from "@tanstack/react-query";
 import { IoSearchSharp } from "react-icons/io5";
-import { User, ConversationResponse, Participant } from "../../types";
+import { ConversationResponse } from "../../types";
 import { getConversations, createConversation } from "../../api/conversation";
 import toast from "react-hot-toast";
 

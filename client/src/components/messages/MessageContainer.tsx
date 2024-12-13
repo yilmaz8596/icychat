@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useStore } from "../../store/useStore";
 import { TiMessages } from "react-icons/ti";
 import Messages from "./Messages";
-import { Message } from "../../types";
 import MessageInput from "./MessageInput";
-import { SelectedConversation, User } from "../../types";
+import { User } from "../../types";
 
 export default function MessageContainer() {
   const { selectedConversation, setSelectedConversation, fetchUsers, users } =

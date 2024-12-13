@@ -11,7 +11,7 @@ interface MessagesProps {
   profilePic: string;
 }
 
-export default function Messages({ messages, profilePic }: MessagesProps) {
+export default function Messages({ messages }: MessagesProps) {
   const [loading, setLoading] = useState(false);
   const { user, users, selectedConversation } = useStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);

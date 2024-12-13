@@ -16,7 +16,7 @@ interface StoreState {
     username: string;
     email: string;
     gender: string;
-    profilePic: string;
+    profilePic?: string;
   } | null;
 
   selectedConversation: {

@@ -38,8 +38,6 @@ export default function Message({
     img.src = getDefaultAvatar(senderId, user?.gender || "");
   };
 
-  const shakeClass = shouldShake ? "shake" : "";
-
   return (
     <div
       className={`flex w-full mb-4 ${

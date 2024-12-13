@@ -1,11 +1,6 @@
 import { useSocketContext } from "../../context/socket.context";
 import { useStore } from "../../store/useStore";
-import {
-  ConversationResponse,
-  SelectedConversation,
-  Message,
-  UserProps,
-} from "../../types";
+import { ConversationResponse, UserProps } from "../../types";
 import { createConversation } from "../../api/conversation";
 
 interface ConversationProps {
@@ -52,7 +47,6 @@ export default function Conversation({
     }
   };
 
-  const isSelected = selectedConversation?._id === conversation?._id;
   const { onlineUsers } = useSocketContext()!;
   const isOnline = onlineUsers.includes(user._id);
 

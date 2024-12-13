@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { Socket, io } from "socket.io-client";
 import { useStore } from "../store/useStore";
-import { User } from "../types";
 
 interface SocketContextType {
   socket: Socket | null;
