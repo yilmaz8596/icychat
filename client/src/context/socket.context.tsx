@@ -26,7 +26,7 @@ export const SocketContextProvider = ({
     let newSocket: Socket | null = null;
 
     if (user) {
-      newSocket = io("http://localhost:8000", {
+      newSocket = io("https://icychat.onrender.com", {
         query: { userId: user._id },
       });
       setSocket(newSocket);
