@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Message as MessageProps, Participant } from "../../types";
+import { useListenMessages } from "../../hooks/useListenMessages";
+import { Message as MessageProps } from "../../types";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
 import { useStore } from "../../store/useStore";
@@ -12,7 +13,9 @@ interface MessagesProps {
 
 export default function Messages({ messages, profilePic }: MessagesProps) {
   const [loading, setLoading] = useState(false);
-  const { selectedConversation, user, users, conversations } = useStore();
+  const { user, users } = useStore();
+
+  useListenMessages();
 
   return (
     <div className="px-4 flex-1 overflow-auto">
