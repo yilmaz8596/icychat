@@ -11,16 +11,12 @@ interface ConversationProps {
 }
 
 export default function Conversation({
-  conversation,
   user,
   emoji,
   lastIdx,
 }: ConversationProps) {
-  const {
-    setSelectedConversation: setClickedConversation,
-    conversations,
-    selectedConversation,
-  } = useStore();
+  const { setSelectedConversation: setClickedConversation, conversations } =
+    useStore();
 
   const handleCreateConversation = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>

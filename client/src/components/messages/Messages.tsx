@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useListenMessages } from "../../hooks/useListenMessages";
 import { Message as MessageProps } from "../../types";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
@@ -9,10 +9,10 @@ import { Message as MyMessage } from "../../types";
 interface MessagesProps {
   messages?: MyMessage[];
   profilePic: string;
+  loading: boolean;
 }
 
-export default function Messages({ messages }: MessagesProps) {
-  const [loading, setLoading] = useState(false);
+export default function Messages({ messages, loading }: MessagesProps) {
   const { user, users, selectedConversation } = useStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 

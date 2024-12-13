@@ -44,6 +44,7 @@ export default function MessageContainer() {
           <Messages
             messages={messages}
             profilePic={otherParticipant?.profilePic!}
+            loading={!messages}
           />
           <MessageInput />
         </>
